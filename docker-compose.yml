@@ -1,0 +1,37 @@
+version: "3"
+services:
+  postgres:
+    container_name: postgres_task_management
+    image: postgres:11.5
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgresdata:/data/postgres
+    env_file:
+      - docker.env
+    networks:
+      - postgres
+
+  pgadmin:
+    links:
+      - postgres:postgres
+    container_name: pgadmin_task_management
+    image: dpage/pgadmin4
+    ports:
+      - "9090:80"
+    volumes:
+      - pgadmindata:/root/.pgadmin
+    env_file:
+      - docker.env
+    networks:
+      - postgres
+
+volumes:
+  postgresdata:
+    driver: local
+  pgadmindata:
+    driver: local
+
+networks:
+  postgres:
+    driver: bridge
